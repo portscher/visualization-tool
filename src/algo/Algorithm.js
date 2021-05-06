@@ -272,29 +272,30 @@ export default class Algorithm {
 			field.size = maxsize;
 		}
 		return function (event) {
-			let keyASCII = 0;
+			let inputKey = 0;
 			if (window.event) {
 				// IE
-				keyASCII = event.keyCode;
+				inputKey = event.keyCode;
 			} else if (event.which) {
 				// Netscape/Firefox/Opera
-				keyASCII = event.which;
+				inputKey = event.which;
 			}
 
-			if (keyASCII === 13 && funct != null) {
+			if (inputKey === 13 && funct != null) {
 				funct();
 			} else if (
-				keyASCII === 190 ||
-				keyASCII === 59 ||
-				keyASCII === 173 ||
-				keyASCII === 189
+				inputKey === 190 ||	// period
+				inputKey === 59 ||	// semicolon
+				inputKey === 173 ||	// minus
+				inputKey === 189	// dash
 			) {
 				return false;
 			} else if (
 				(maxsize !== undefined && field.value.length >= maxsize) ||
-				(intOnly && (keyASCII < 48 || keyASCII > 57))
+				// JS differs between numbers from the keyboard (codes 48-57) and the numpad (codes 96-105)
+				(intOnly && !((inputKey >= 48 && inputKey <= 57) || (inputKey >= 96 && inputKey <= 105)) )
 			) {
-				if (!controlKey(keyASCII)) return false;
+				if (!controlKey(inputKey)) return false;
 			}
 		};
 	}
@@ -321,15 +322,15 @@ export default class Algorithm {
 	}
 }
 
-export function controlKey(keyASCII) {
+export function controlKey(inputKey) {
 	return (
-		keyASCII === 8 ||
-		keyASCII === 9 ||
-		keyASCII === 37 ||
-		keyASCII === 38 ||
-		keyASCII === 39 ||
-		keyASCII === 40 ||
-		keyASCII === 46
+		inputKey === 8 ||	// backspace
+		inputKey === 9 ||	// tab
+		inputKey === 37 ||	// left arrow
+		inputKey === 38 ||	// up arrow
+		inputKey === 39 ||	// right arrow
+		inputKey === 40 ||	// down arrow
+		inputKey === 46		// delete
 	);
 }
 
@@ -338,41 +339,41 @@ Algorithm.prototype.returnSubmitFloat = function (field, funct, maxsize) {
 		field.size = maxsize;
 	}
 	return function (event) {
-		let keyASCII = 0;
+		let inputKey = 0;
 		if (window.event) {
 			// IE
-			keyASCII = event.keyCode;
+			inputKey = event.keyCode;
 		} else if (event.which) {
 			// Netscape/Firefox/Opera
-			keyASCII = event.which;
+			inputKey = event.which;
 		}
 		// Submit on return
-		if (keyASCII === 13) {
+		if (inputKey === 13) {
 			funct();
 		}
 		// Control keys (arrows, del, etc) are always OK
-		else if (controlKey(keyASCII)) {
+		else if (controlKey(inputKey)) {
 			return;
 		}
-		// - (minus sign) only OK at beginning of number
-		//  (For now we will allow anywhere -- hard to see where the beginning of the
-		//   number is ...)
-		//else if (keyASCII == 109 && field.value.length  == 0)
-		else if (keyASCII === 109) {
+			// - (minus sign) only OK at beginning of number
+			//  (For now we will allow anywhere -- hard to see where the beginning of the
+			//   number is ...)
+		//else if (inputKey == 109 && field.value.length  == 0)
+		else if (inputKey === 109) {
 			return;
 		}
-		// Digis are OK if we have enough space
+		// Digits are OK if we have enough space
 		else if (
 			(maxsize !== undefined || field.value.length < maxsize) &&
-			keyASCII >= 48 &&
-			keyASCII <= 57
+			inputKey >= 48 &&
+			inputKey <= 57
 		) {
 			return;
 		}
 		// . (Decimal point) is OK if we haven't had one yet, and there is space
 		else if (
 			(maxsize !== undefined || field.value.length < maxsize) &&
-			keyASCII === 190 &&
+			inputKey === 190 &&
 			field.value.indexOf('.') === -1
 		) {
 			return;
