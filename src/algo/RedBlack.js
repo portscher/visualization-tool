@@ -544,7 +544,7 @@ export default class RedBlack extends Algorithm {
 
     attachNullLeaf(node, side) {
         const treeNodeID = this.nextIndex++;
-        this.cmd(act.createCircle, treeNodeID, "NULL", node.x, node.y);
+        this.cmd(act.createRectangle, treeNodeID, "", 10, 10, node.x, node.y);
         this.colorBlack(treeNodeID);
         if (side === RedBlack.LEFT) {
             node.left = new RedBlackNode("", treeNodeID, this.startingX, RedBlack.STARTING_Y);
@@ -570,7 +570,7 @@ export default class RedBlack extends Algorithm {
         const treeNodeID = this.nextIndex++;
         this.cmd(act.setText, 0, "Coloring 'Null Leaf' double black");
 
-        this.cmd(act.createCircle, treeNodeID, "NULL", tree.x, tree.y);
+        this.cmd(act.createRectangle, treeNodeID, "", 10, 10, tree.x, tree.y);
         this.cmd(act.setForegroundColor, treeNodeID, RedBlack.FOREGROUND_BLACK);
         this.cmd(act.setBackgroundColor, treeNodeID, RedBlack.BACKGROUND_DOUBLE_BLACK);
         const nullLeaf = new RedBlackNode("NULL", treeNodeID, tree.x, tree.x);
