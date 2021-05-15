@@ -588,7 +588,7 @@ export default class RedBlack extends Algorithm {
 
         this.resizeTree();
 
-        this.fixExtraBlackChild(tree, false);
+        this.fixExtraBlackChild(tree, side === RedBlack.LEFT);
 
         this.cmd(act.setLayer, nullLeaf.graphicID, 1);
         nullLeaf.blackLevel = 1;
@@ -675,27 +675,27 @@ export default class RedBlack extends Algorithm {
 
             const oldParBlackLevel = parentNode.blackLevel;
             const newPar = this.singleRotateLeft(parentNode);
-            this.fixParentNodeColor(oldParBlackLevel, newPar, newPar.left, newPar.left.left);
+            this.fixParentNodeColor(oldParBlackLevel, newPar, newPar.left.left);
         } else {
             this.cmd(act.setText, 0, "Double black node has black sibling, is a right child, and its left nephew is red.\nOne rotation can fix double-blackness.");
             this.cmd(act.step);
 
             const oldParBlackLevel = parentNode.blackLevel;
             const newPar = this.singleRotateRight(parentNode);
-            this.fixParentNodeColor(oldParBlackLevel, newPar, newPar.right, newPar.right.right);
+            this.fixParentNodeColor(oldParBlackLevel, newPar, newPar.right.right);
         }
     }
 
 
-    fixParentNodeColor(oldParBlackLevel, newPar, newParSub, newParSubSub) {
+    fixParentNodeColor(oldParBlackLevel, newPar, newParSubSub) {
         if (oldParBlackLevel === 0) {
             newPar.blackLevel = 0;
             this.fixNodeColor(newPar);
-            newParSub.blackLevel = 1;
-            this.fixNodeColor(newPar.right);
         }
         newPar.left.blackLevel = 1;
         this.fixNodeColor(newPar.left);
+        newPar.right.blackLevel = 1;
+        this.fixNodeColor(newPar.right);
         if (newParSubSub != null) {
             newParSubSub.blackLevel = 1;
             this.fixNodeColor(newParSubSub);
