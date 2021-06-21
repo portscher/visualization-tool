@@ -544,7 +544,7 @@ export default class RedBlack extends Algorithm {
 
     attachNullLeaf(node, side) {
         const treeNodeID = this.nextIndex++;
-        this.cmd(act.createCircle, treeNodeID, "NULL", node.x, node.y);
+        this.cmd(act.createRectangle, treeNodeID, "", 10, 10, node.x, node.y);
         this.colorBlack(treeNodeID);
         if (side === RedBlack.LEFT) {
             node.left = new RedBlackNode("", treeNodeID, this.startingX, RedBlack.STARTING_Y);
@@ -570,7 +570,7 @@ export default class RedBlack extends Algorithm {
         const treeNodeID = this.nextIndex++;
         this.cmd(act.setText, 0, "Coloring 'Null Leaf' double black");
 
-        this.cmd(act.createCircle, treeNodeID, "NULL", tree.x, tree.y);
+        this.cmd(act.createRectangle, treeNodeID, "", 10, 10, tree.x, tree.y);
         this.cmd(act.setForegroundColor, treeNodeID, RedBlack.FOREGROUND_BLACK);
         this.cmd(act.setBackgroundColor, treeNodeID, RedBlack.BACKGROUND_DOUBLE_BLACK);
         const nullLeaf = new RedBlackNode("NULL", treeNodeID, tree.x, tree.x);
@@ -588,7 +588,7 @@ export default class RedBlack extends Algorithm {
 
         this.resizeTree();
 
-        this.fixExtraBlackChild(tree, false);
+        this.fixExtraBlackChild(tree, side === RedBlack.LEFT);
 
         this.cmd(act.setLayer, nullLeaf.graphicID, 1);
         nullLeaf.blackLevel = 1;
@@ -675,27 +675,27 @@ export default class RedBlack extends Algorithm {
 
             const oldParBlackLevel = parentNode.blackLevel;
             const newPar = this.singleRotateLeft(parentNode);
-            this.fixParentNodeColor(oldParBlackLevel, newPar, newPar.left, newPar.left.left);
+            this.fixParentNodeColor(oldParBlackLevel, newPar, newPar.left.left);
         } else {
             this.cmd(act.setText, 0, "Double black node has black sibling, is a right child, and its left nephew is red.\nOne rotation can fix double-blackness.");
             this.cmd(act.step);
 
             const oldParBlackLevel = parentNode.blackLevel;
             const newPar = this.singleRotateRight(parentNode);
-            this.fixParentNodeColor(oldParBlackLevel, newPar, newPar.right, newPar.right.right);
+            this.fixParentNodeColor(oldParBlackLevel, newPar, newPar.right.right);
         }
     }
 
 
-    fixParentNodeColor(oldParBlackLevel, newPar, newParSub, newParSubSub) {
+    fixParentNodeColor(oldParBlackLevel, newPar, newParSubSub) {
         if (oldParBlackLevel === 0) {
             newPar.blackLevel = 0;
             this.fixNodeColor(newPar);
-            newParSub.blackLevel = 1;
-            this.fixNodeColor(newPar.right);
         }
         newPar.left.blackLevel = 1;
         this.fixNodeColor(newPar.left);
+        newPar.right.blackLevel = 1;
+        this.fixNodeColor(newPar.right);
         if (newParSubSub != null) {
             newParSubSub.blackLevel = 1;
             this.fixNodeColor(newParSubSub);
@@ -1100,10 +1100,10 @@ RedBlackNode.prototype.isLeftChild = function () {
 RedBlack.FIRST_PRINT_POS_X = 50;
 RedBlack.PRINT_VERTICAL_GAP = 20;
 RedBlack.PRINT_HORIZONTAL_GAP = 50;
-RedBlack.FOREGROUND_RED = "#AA0000";
-RedBlack.BACKGROUND_RED = "#FFAAAA";
+RedBlack.FOREGROUND_RED = "#CC0000";
+RedBlack.BACKGROUND_RED = "#FFCCCC";
 RedBlack.FOREGROUND_BLACK = "#000000"
-RedBlack.BACKGROUND_BLACK = "#AAAAAA";
+RedBlack.BACKGROUND_BLACK = "#CCCCCC";
 RedBlack.BACKGROUND_DOUBLE_BLACK = "#777777";
 
 
