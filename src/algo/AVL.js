@@ -56,7 +56,7 @@ export default class AVL extends Algorithm {
 			this.insertField,
 			this.insertCallback.bind(this),
 			4,
-			true,
+			false,
 		);
 		this.controls.push(this.insertField);
 
@@ -71,7 +71,7 @@ export default class AVL extends Algorithm {
 			this.deleteField,
 			this.deleteCallback.bind(this),
 			4,
-			true,
+			false,
 		);
 		this.controls.push(this.deleteField);
 
@@ -86,7 +86,7 @@ export default class AVL extends Algorithm {
 			this.findField,
 			this.findCallback.bind(this),
 			4,
-			true,
+			false,
 		);
 		this.controls.push(this.findField);
 
@@ -134,7 +134,7 @@ export default class AVL extends Algorithm {
 		if (insertedValue !== '') {
 			// set text value
 			this.insertField.value = '';
-			this.implementAction(this.add.bind(this), parseInt(insertedValue));
+			this.implementAction(this.add.bind(this), insertedValue);
 		}
 	}
 
@@ -143,7 +143,7 @@ export default class AVL extends Algorithm {
 		if (deletedValue !== '') {
 			deletedValue = this.normalizeNumber(deletedValue, 4);
 			this.deleteField.value = '';
-			this.implementAction(this.remove.bind(this), parseInt(deletedValue));
+			this.implementAction(this.remove.bind(this), deletedValue);
 		}
 	}
 
@@ -152,7 +152,7 @@ export default class AVL extends Algorithm {
 		if (findValue !== '') {
 			findValue = this.normalizeNumber(findValue, 4);
 			this.findField.value = '';
-			this.implementAction(this.findElement.bind(this), parseInt(findValue));
+			this.implementAction(this.findElement.bind(this), findValue);
 		}
 	}
 
