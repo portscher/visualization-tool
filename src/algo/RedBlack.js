@@ -52,7 +52,7 @@ export default class RedBlack extends Algorithm {
         this.controls = [];
 
         this.insertField = addControlToAlgorithmBar("Text", "");
-        this.insertField.onkeydown = this.returnSubmit(this.insertField, this.insertCallback.bind(this), 4, true);
+        this.insertField.onkeydown = this.returnSubmit(this.insertField, this.insertCallback.bind(this), 4, false);
         this.controls.push(this.insertField);
 
         this.insertButton = addControlToAlgorithmBar("Button", "Insert");
@@ -60,7 +60,7 @@ export default class RedBlack extends Algorithm {
         this.controls.push(this.insertButton);
 
         this.deleteField = addControlToAlgorithmBar("Text", "");
-        this.deleteField.onkeydown = this.returnSubmit(this.deleteField, this.deleteCallback.bind(this), 4, true);
+        this.deleteField.onkeydown = this.returnSubmit(this.deleteField, this.deleteCallback.bind(this), 4, false);
         this.controls.push(this.deleteField);
 
         this.deleteButton = addControlToAlgorithmBar("Button", "Delete");
@@ -68,7 +68,7 @@ export default class RedBlack extends Algorithm {
         this.controls.push(this.deleteButton);
 
         this.findField = addControlToAlgorithmBar("Text", "");
-        this.findField.onkeydown = this.returnSubmit(this.findField, this.findCallback.bind(this), 4, true);
+        this.findField.onkeydown = this.returnSubmit(this.findField, this.findCallback.bind(this), 4, false);
         this.controls.push(this.findField);
 
         this.findButton = addControlToAlgorithmBar("Button", "Find");
@@ -97,7 +97,7 @@ export default class RedBlack extends Algorithm {
         insertedValue = this.normalizeNumber(insertedValue, 4);
         if (insertedValue !== "") {
             this.insertField.value = "";
-            this.implementAction(this.insertElement.bind(this), parseInt(insertedValue));
+            this.implementAction(this.insertElement.bind(this), insertedValue);
         }
     }
 
@@ -107,7 +107,7 @@ export default class RedBlack extends Algorithm {
         if (deletedValue !== "") {
             deletedValue = this.normalizeNumber(deletedValue, 4);
             this.deleteField.value = "";
-            this.implementAction(this.deleteElement.bind(this), parseInt(deletedValue));
+            this.implementAction(this.deleteElement.bind(this), deletedValue);
         }
     }
 
@@ -117,7 +117,7 @@ export default class RedBlack extends Algorithm {
         if (findValue !== "") {
             findValue = this.normalizeNumber(findValue, 4);
             this.findField.value = "";
-            this.implementAction(this.findElement.bind(this), parseInt(findValue));
+            this.implementAction(this.findElement.bind(this), findValue);
         }
     }
 
@@ -201,7 +201,7 @@ export default class RedBlack extends Algorithm {
         this.cmd(act.setText, 0, "Searching for " + value);
         if (tree != null && !tree.phantomLeaf) {
             this.cmd(act.setHighlight, tree.graphicID, 1);
-            if (parseInt(tree.data) === value) {
+            if (tree.data === value) {
                 this.cmd(act.setText, 0, "Searching for " + value + " : " + value + " = " + value + " (Element found!)");
                 this.cmd(act.step);
                 this.cmd(act.setText, 0, "Found:" + value);
